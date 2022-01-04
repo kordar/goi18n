@@ -1,4 +1,4 @@
-module gitee.com/kordar/goi18n
+module github.com/kordar/goi18n
 
 go 1.16
 
