@@ -6,23 +6,33 @@ import (
 	"path"
 )
 
-var lang Handler
+var container = map[string]Handler{}
 
-func InitLang(handler Handler) {
-	lang = handler
+func InitLang(handler Handler, more ...Handler) {
+	container[handler.GetSign()] = handler
+	for _, h := range more {
+		container[h.GetSign()] = h
+	}
 }
 
 type Handler interface {
-	GetSection(lang string, section string) map[string]string
-	GetSectionValue(lang string, section string, key string) string
+	GetSign() string
+	GetSection(lang string, section string) interface{}
+	GetSectionValue(lang string, section string, key string) interface{}
 }
 
-func GetSectionValue(lug string, section string, key string) string {
-	return lang.GetSectionValue(lug, section, key)
+func GetSectionValue(lug string, section string, key string, t string) interface{} {
+	if container[t] == nil {
+		return ""
+	}
+	return container[t].GetSectionValue(lug, section, key)
 }
 
-func GetSection(lug string, section string) map[string]string {
-	return lang.GetSection(lug, section)
+func GetSection(lug string, section string, t string) interface{} {
+	if container[t] == nil {
+		return nil
+	}
+	return container[t].GetSection(lug, section)
 }
 
 // GetAllFile 递归获取指定目录下的所有文件名

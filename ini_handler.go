@@ -58,7 +58,11 @@ func NewIniHandler(dir string, lang string) Handler {
 	return &handler
 }
 
-func (ini IniHandler) GetSection(lang string, section string) map[string]string {
+func (ini IniHandler) GetSign() string {
+	return "ini"
+}
+
+func (ini IniHandler) GetSection(lang string, section string) interface{} {
 	cfg := ini.cfgs[lang]
 	if cfg == nil {
 		cfg = ini.defaultCfg
@@ -71,7 +75,7 @@ func (ini IniHandler) GetSection(lang string, section string) map[string]string 
 	}
 }
 
-func (ini IniHandler) GetSectionValue(lang string, section string, key string) string {
+func (ini IniHandler) GetSectionValue(lang string, section string, key string) interface{} {
 	cfg := ini.cfgs[lang]
 	if cfg == nil {
 		cfg = ini.defaultCfg
